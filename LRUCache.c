@@ -45,8 +45,61 @@ QNode* newQNode(unsigned pageNumber) {
 }
 
 // A utility function to create an empty Hash of given capacity
-Hash* createHash (int capacity) {
+Hash* createHash(int capacity) {
     // Allocate memory for hash
     Hash* hash = (Hash *)malloc(sizeof(Hash));
+    hash->capacity = capacity;
     
+    // Create an array of pointers for referring Queue Nodes
+    hash->array = (QNode **)malloc(hash->capacity * sizeof(QNode*));
+    
+    // Initialize all hash entries as empty
+    int i;
+    for (i=0; i < hash->capcity; ++i)
+        hash->array[i] = NULL;
+    
+    return hash;
 }
+
+/* A function to check if there is slot available in memory
+ * Since count is the number of filled frames and numberOfFrames 
+ *  is the total number of frames then this should return false is memory 
+ *  is available
+*/
+int AreAllFramesFull (Queue* queue) {
+    return queue->count == queue->numberOfFrames;
+}
+
+/* Utility function to check if queue is empty
+ * Since the Queue uses a FIFO method, new items are  
+ *  added to the tail of the list. So if there is nothing 
+ *  at the tail then the Queue is empty.
+ */
+int isQueueEmpty(Queue* queue) {
+    return queue->rear == NULL;
+}
+
+// A utility function to delete a frame from queue
+void deQueue (Queue* queue) {
+    // If queue is empty then no need to delete
+    if (isQueueEmpty(queue))
+        return;
+    
+    // If this is the only node in list, then change front
+    if (queue->front == queue->rear) 
+        queue->front == NULL;
+    
+    if (queue->rear)
+        queue->rear->next = NULL;
+    
+    free(temp);
+    
+    // decreament the number of full frames by 1
+    queue->count--;
+}
+
+
+
+
+
+
