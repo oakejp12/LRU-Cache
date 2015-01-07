@@ -1,74 +1,52 @@
-#include <unordered_map>
-#include <vector>
-#include "LRUCache.h"
+/* Implement LRU Cache 
+ * - Given total possible page numbers that can be referred & cache size (
+ *    total number of page frames that cache can hold at a time) 
+ * - LRU cacheing scheme is to remove the least recently used frame when
+ *      the cache is full & a new page is referenced which is not in cache
+ * - Two data structures to use: 
+ *      Queue (implemented using a doubly-linked list) - max size of Queue is   
+ *          equal to the total number of frames available (cache size)
+ *      Hash - page number as key & address of corresponding queue node as value
+*/
 
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
-template <class K,  class T>
-Cache<K,T>::Cache(size_t size){
-	entries = new construct<K, T>[size];
-	
-	int i = 0;
-	for (i; i < size; i++) {
-		_freeEntries.push_back(entries + i);
-	}
-	head = new construct < K, T > ;
-	tail = new construct < K, T > ;
-	head->prev = nullptr;
-	head->next = tail;
-	tail->prev = head;
-	tail->next = nullptr;
+// A Queue Node 
+typedef struct QNode {
+    struct QNode *prev, *next;
+    unsigned pageNumber;  // The page number stored in this QNode
+} QNode;
+
+// A Queue - FIFO collection of Queue Nodes
+typedef struct Queue {
+    unsigned count; // Number of filled frames
+    unsigned numberOfFrames; // total number of frames
+    QNode *front, *rear;
+} Queue;
+
+
+// A hash (collection of pointers to Queue Nodes)
+typedef struct Hash {
+    int capacity; // how many pages can be there
+    QNode* *array; // an array of queue Nodes
+} Hash;
+
+// Utility function to create a new Queue Node - stores the given 'pageNumber'
+QNode* newQNode(unsigned pageNumber) {
+    // Allocate memory and assign 'pageNumber'
+    QNode* temp = (QNode *)malloc(sizeof(QNode));
+    temp->pageNumber = pageNumber;
+    
+    // Initialize prev and next as NULL
+    temp->prev = temp->next = NULL;
+    
+    return temp;
 }
 
-template <class K, class T>
-Cache<K, T>::~Cache(){
-	delete head;
-	delete tail;
-	delete [] entries;
+// A utility function to create an empty Hash of given capacity
+Hash* createHash (int capacity) {
+    // Allocate memory for hash
+    Hash* hash = (Hash *)malloc(sizeof(Hash));
+    
 }
-
-template <class K, class T>
-void Cache<K, T>::put(K key, T data) {
-	construct<K, T>* node = _mapping[key];
-	if (node) {
-		// Refresh the lined list
-		detach(node);
-		node->data = data;
-		attach(node);
-	}
-	else {
-		if (_freeEntries.empty()) {
-			node = tail->prev;
-			detach(node);
-			_map.erase(node->key);
-			node->data = data;
-			node->key = key;
-			_map[key] = node;
-			attach(node);
-		}
-		else {
-			node = _freeEntries.back();
-			_freeEntries.pop_back();
-			node->key = key;
-			node->data = data;
-			_map[key] = node;
-			attach(node);
-		}
-	}
-
-}
-
-template <class K, class T>
-T Cache<K, T>::get(K key) {
-	construct<K,T>* node = _map[key];
-	if (node) {
-		detach(node);
-		attach(node);
-		return node->data;
-	}
-	else { return nullptr; }
-}
-
-
-
-
