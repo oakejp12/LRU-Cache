@@ -1,14 +1,15 @@
 lruCache
 ========
 
-Implementation of an LRU Cache 
+C Implementation of an LRU Cache 
+Upcoming: C++ Implementation using freelists with Queue and Hash data structures
 
 
 Build Instructions: 
 ========
-C++ - LRUCache.h - Header file
-      LRUCache.cpp - Source file
-      
+C Source File - LRUCache.c 
+     
+    
 How it works:
 ========
 
