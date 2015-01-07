@@ -81,6 +81,7 @@ int isQueueEmpty(Queue* queue) {
 
 // A utility function to delete a frame from queue
 void deQueue (Queue* queue) {
+    
     // If queue is empty then no need to delete
     if (isQueueEmpty(queue))
         return;
@@ -99,7 +100,25 @@ void deQueue (Queue* queue) {
 }
 
 
-
+// A function to add a page with given 'pageNumber' to both queue
+// and hash
+void Enqueue(Queue* queue, Hash* hash, unsigned pageNumber) {
+    
+    // If all frames are full, remove the page at the rear
+    if (AreAllFramesFull(queue)) {
+        // remove page from hash
+        hash->array[queue->rear->pageNumber] = NULL;
+        deQueue(queue);
+    }
+    
+    
+    
+    
+    if(isQueueEmpty(queue)){
+        
+    }
+    
+}
 
 
 
