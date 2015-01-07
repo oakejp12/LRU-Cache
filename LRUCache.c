@@ -47,7 +47,7 @@ QNode* newQNode(unsigned pageNumber) {
 
 // Utility function to create an empty Queue
 // Queue can have at most 'numberOfFrames' nodes
-Queue* createQueue(int numberfFrames) {
+Queue* createQueue(int numberOfFrames) {
     Queue* queue = (Queue *)malloc(sizeof(Queue));
     
     // The queue is empty
@@ -72,7 +72,7 @@ Hash* createHash(int capacity) {
     
     // Initialize all hash entries as empty
     int i;
-    for (i=0; i < hash->capcity; ++i)
+    for (i=0; i < hash->capacity; ++i)
         hash->array[i] = NULL;
     
     return hash;
@@ -107,6 +107,10 @@ void deQueue (Queue* queue) {
     if (queue->front == queue->rear) 
         queue->front == NULL;
     
+    // Change rear and remove the previous rear
+    QNode* temp = queue->rear;
+    queue->rear = queue->rear->prev;
+    
     if (queue->rear)
         queue->rear->next = NULL;
     
@@ -131,7 +135,7 @@ void Enqueue(Queue* queue, Hash* hash, unsigned pageNumber) {
     
     // Create a new node with given page number,
     // And add the new node to the front of queue
-    QNode* temp = newQNode(pagenumber);
+    QNode* temp = newQNode(pageNumber);
     temp->next = queue->front;
     
     // If queue is empty, change both front and rear pointers
@@ -211,8 +215,7 @@ int main() {
     printf("%d ", q->front->next->pageNumber);
     printf("%d ", q->front->next->next->pageNumber);
     printf("%d ", q->front->next->next->next->pageNumber);
-    
-    
+      
 }
 
 
